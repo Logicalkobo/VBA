@@ -1,0 +1,34 @@
+Sub 角丸サイズ調整()
+
+    'シェイプが選択されていなければ、処理を中断する。
+    If Not ActiveWindow.Selection.Type = ppSelectionShapes Then Exit Sub
+
+    Dim 角のサイズ As Double, Temp As Variant
+
+    Do Until Temp >= 1 And Temp <= 20
+        Temp = InputBox("1～20の数値を入力してください。")
+        If Temp = "" Then
+            Exit Sub
+        ElseIf Not IsNumeric(Temp) Then
+            Temp = 0    'ループ継続させるためのゼロ代入
+        End If
+    Loop
+
+    角のサイズ = CDbl(Temp)
+
+    Dim 図 As Shape
+    Dim 短辺 As Double
+    For Each 図 In ActiveWindow.Selection.ShapeRange
+        If 図.AutoShapeType = msoShapeRoundedRectangle Then
+
+            '角丸のサイズは、角丸四角形の短辺に対する割合(0～0.5)で表される。
+            'まず、どちらが短辺なのかを判定し、そのサイズを代入する。
+            短辺 = IIf(図.Width < 図.Height, 図.Width, 図.Height)
+
+            '次に、ユーザーが入力したサイズを短辺で割ることで図形に割合を求め、
+            '角丸サイズを表す「図.Adjustments.Item(1)」に代入する。
+            図.Adjustments.Item(1) = 角のサイズ / 短辺
+        End If
+    Next
+
+End Sub

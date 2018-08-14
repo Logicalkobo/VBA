@@ -1,0 +1,15 @@
+Sub 一括グレスケ()
+  Dim sld As Slide
+  Dim i As Long
+
+  For Each sld In ActivePresentation.Slides
+  With sld
+    For i = .Shapes.Count To 1 Step -1
+      If .Shapes(i).BlackWhiteMode <> msoBlackWhiteGrayScale Then
+        .Shapes(i).BlackWhiteMode = msoBlackWhiteGrayScale
+      End If
+    Next i
+  End With
+  Next sld
+
+End Sub
